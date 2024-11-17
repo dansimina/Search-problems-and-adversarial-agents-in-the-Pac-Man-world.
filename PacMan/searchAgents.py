@@ -393,7 +393,6 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     return score
 
 
-
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
     def __init__(self):
@@ -481,7 +480,17 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+
+    if problem.heuristicInfo == {}:
+        for i in range(0, problem.walls.length):
+            for j in range(0, problem.walls[i].length):
+                pass
+
+    score = 0
+    for food in foodGrid.asList():
+        score = max(score, abs(position[0] - food[0]) + abs(position[1] - food[1]))
+
+    return score
 
 
 class ClosestDotSearchAgent(SearchAgent):
