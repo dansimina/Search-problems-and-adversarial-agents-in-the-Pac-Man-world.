@@ -42,6 +42,8 @@ import util
 import time
 import search
 import pacman
+from util import manhattanDistance
+
 
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
@@ -481,16 +483,11 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
 
-    if problem.heuristicInfo == {}:
-        for i in range(0, problem.walls.length):
-            for j in range(0, problem.walls[i].length):
-                pass
-
     score = 0
     for food in foodGrid.asList():
-        score = max(score, abs(position[0] - food[0]) + abs(position[1] - food[1]))
+        score = max(score, manhattanDistance(position, food))
 
-    return score
+    return len(foodGrid.asList()) * 0.5 + score * 0.5
 
 
 class ClosestDotSearchAgent(SearchAgent):
@@ -522,7 +519,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.bfs(AnyFoodSearchProblem(gameState))
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -558,7 +555,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.food[x][y]
 
 def mazeDistance(point1: Tuple[int, int], point2: Tuple[int, int], gameState: pacman.GameState) -> int:
     """
