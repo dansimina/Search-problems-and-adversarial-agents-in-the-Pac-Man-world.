@@ -180,26 +180,34 @@ class MinimaxAgent(MultiAgentSearchAgent):
         util.raiseNotDefined()
 
         # def minimaxDecision(agent_index: int, state: GameState):
-        #     newState, action = max(minValue((agent_index + 1), state), )
-        #     return action
-        #
-        # def minValue(agent_index: int, state: GameState):
-        #     if state.isWin() or state.isLose():
-        #         return self.evaluationFunction
-        #     v = -2**31
+        #     v = -2 ** 31
+        #     a = None
         #     for action in state.getLegalActions(agent_index):
-        #       v = min(maxValue(gameState.generateSuccessor(agent_index + 1, action)), v)
+        #         if v < minValue(0, agent_index + 1, gameState.generateSuccessor(agent_index, action):
+        #             v =
+        #     return a
         #
-        #     return v
-        #
-        # def maxValue(agent_index: int, state: GameState):
+        # def minValue(depth:int, agent_index: int, state: GameState):
         #     if state.isWin() or state.isLose():
         #         return self.evaluationFunction
         #     v = 2**31 - 1
         #     for action in state.getLegalActions(agent_index):
-        #         v = max(maxValue(gameState.generateSuccessor(agent_index, action)), v)
+        #         if agent_index == gameState.getNumAgents() - 1:
+        #             v = min(maxValue(depth + 1,0, gameState.generateSuccessor(agent_index + 1, action)), v)
+        #         else:
+        #             v = min(minValue(depth, 0, gameState.generateSuccessor(agent_index + 1, action)), v)
+        #     return v
+        #
+        # def maxValue(depth:int, agent_index: int, state: GameState):
+        #     if state.isWin() or state.isLose():
+        #         return self.evaluationFunction
+        #     v = -2**31
+        #     for action in state.getLegalActions(agent_index):
+        #         v = max(minValue(depth, agent_index + 1, gameState.generateSuccessor(agent_index, action)), v)
         #
         #     return v
+        #
+        # return minimaxDecision(0, gameState)
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
