@@ -392,13 +392,13 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     score = 0
 
     if not cornersState[0]:
-        score += abs(position[0] - corners[0][0]) + abs(position[1] - corners[0][1]) * 0.25
+        score = max(score, manhattanDistance(position,corners[0]))
     if not cornersState[1]:
-        score += abs(position[0] - corners[1][0]) + abs(position[1] - corners[1][1]) * 0.25
+        score = max(score, manhattanDistance(position,corners[1]))
     if not cornersState[2]:
-        score += abs(position[0] - corners[2][0]) + abs(position[1] - corners[2][1]) * 0.25
+        score = max(score, manhattanDistance(position,corners[2]))
     if not cornersState[3]:
-        score += abs(position[0] - corners[3][0]) + abs(position[1] - corners[3][1]) * 0.25
+        score = max(score, manhattanDistance(position,corners[3]))
 
     return score
 
@@ -497,22 +497,17 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
 
-    return max([manhattanDistance(position, food) for food in foodGrid.asList()]) if foodGrid.asList() else 0
+    if len(foodGrid.asList()) == 0:
+        return 0
 
-    # nearestFoodPosition = 0
-    # nearestFoodDistance = 2 ** 31 - 1
-    # for food in foodGrid.asList():
-    #     if manhattanDistance(position, food) < nearestFoodDistance:
-    #         nearestFoodDistance = manhattanDistance(position, food)
-    #         nearestFoodPosition = position
-    #
-    # if nearestFoodDistance == 2 ** 31 - 1:
-    #     return 0
-    #
-    # maxDistanceBetweenFood = max(
-    #     [manhattanDistance(nearestFoodPosition, food) for food in foodGrid.asList()]) if foodGrid.asList() else 0
-    #
-    # return nearestFoodDistance + maxDistanceBetweenFood
+    nearestFood = min(manhattanDistance(position, food) for food in foodGrid.asList())
+
+    northernmost = min(foodGrid.asList(), key = lambda x: x[1])
+    southernmost = max(foodGrid.asList(), key = lambda x: x[1])
+    westernmost = min(foodGrid.asList(), key = lambda x: x[0])
+    easternmost = max(foodGrid.asList(), key = lambda x: x[0])
+
+    return nearestFood + manhattanDistance(northernmost, southernmost) * 0.5 + manhattanDistance(westernmost, easternmost) * 0.5
 
 
 class ClosestDotSearchAgent(SearchAgent):
