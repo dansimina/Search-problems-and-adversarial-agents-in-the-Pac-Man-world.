@@ -75,17 +75,25 @@ class ReflexAgent(Agent):
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
-
         currentPositon = currentGameState.getPacmanPosition()
         walls = currentGameState.getWalls()
         food = currentGameState.getFood()
         ghostState = currentGameState.getGhostStates()
 
-        ghostPosition = 0
         ghostDistance = 0
         isGhostThere = False
         penalty = 0
 
+        x, y = currentPositon
+        cntWalls = 0
+        cntArea = 0
+        for i in range(max(0,  -2), min(x + 2, walls.width)):
+            for j in range(max(0, -2), min(y + 2, walls.height)):
+                cntArea += 1
+                if walls[i][j]:
+                    cntWalls += 1
+
+        wallsDensity = cntArea - cntWalls
 
         if len(newGhostStates) == 1:
             ghostPosition = newGhostStates[0].getPosition()
@@ -116,7 +124,7 @@ class ReflexAgent(Agent):
 
         bonusEatFood = 10 if food[newPos[0]][newPos[1]] else 0
 
-        return successorGameState.getScore() + ghostDistance + nearestFoodScore + bonusEatFood + bonusEatGhost - penalty
+        return successorGameState.getScore() + ghostDistance + nearestFoodScore + bonusEatFood + bonusEatGhost - penalty + wallsDensity
 
 def scoreEvaluationFunction(currentGameState: GameState):
     """
