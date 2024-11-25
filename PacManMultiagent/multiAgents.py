@@ -161,7 +161,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Here are some method calls that might be useful when implementing minimax.
 
         gameState.getLegalActions(agentIndex):
-        Returns a list of legal actions for an agent
+        Returns bestAction list of legal actions for an agent
         agentIndex=0 means Pacman, ghosts are >= 1
 
         gameState.generateSuccessor(agentIndex, action):
@@ -171,46 +171,46 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns the total number of agents in the game
 
         gameState.isWin():
-        Returns whether or not the game state is a winning state
+        Returns whether or not the game state is bestAction winning state
 
         gameState.isLose():
-        Returns whether or not the game state is a losing state
+        Returns whether or not the game state is bestAction losing state
         """
         "*** YOUR CODE HERE ***"
 
         def minimaxDecision(agentIndex: int, state: GameState):
             v = -2 ** 31
-            a = None
+            bestAction = None
             numOfAgents = state.getNumAgents()
 
             for action in state.getLegalActions(agentIndex):
                 result = minValue(0, (agentIndex + 1) % numOfAgents, state.generateSuccessor(agentIndex, action))
                 if v < result:
                     v = result
-                    a = action
-            return a
+                    bestAction = action
+            return bestAction
 
-        def minValue(depth:int, agent_index: int, state: GameState) -> int:
+        def minValue(depth:int, agentIndex: int, state: GameState) -> int:
             numOfAgents = state.getNumAgents()
 
             if state.isWin() or state.isLose() or depth == self.depth:
                 return self.evaluationFunction(state)
+
             v = 2**31 - 1
-            for action in state.getLegalActions(agent_index):
-                if agent_index == numOfAgents - 1:
-                    v = min(v, maxValue(depth + 1,0, state.generateSuccessor(agent_index, action)))
+            for action in state.getLegalActions(agentIndex):
+                if agentIndex == numOfAgents - 1:
+                    v = min(v, maxValue(depth + 1, 0, state.generateSuccessor(agentIndex, action)))
                 else:
-                    v = min(v, minValue(depth, (agent_index + 1) % numOfAgents, state.generateSuccessor(agent_index, action)))
+                    v = min(v, minValue(depth, agentIndex + 1, state.generateSuccessor(agentIndex, action)))
             return v
 
-        def maxValue(depth:int, agent_index: int, state: GameState) -> int:
-            numOfAgents = state.getNumAgents()
-
+        def maxValue(depth:int, agentIndex: int, state: GameState) -> int:
             if state.isWin() or state.isLose() or depth == self.depth:
                 return self.evaluationFunction(state)
+
             v = -2**31
-            for action in state.getLegalActions(agent_index):
-                v = max(v, minValue(depth, (agent_index + 1) % numOfAgents, state.generateSuccessor(agent_index, action)))
+            for action in state.getLegalActions(agentIndex):
+                v = max(v, minValue(depth, agentIndex + 1, state.generateSuccessor(agentIndex, action)))
 
             return v
 
