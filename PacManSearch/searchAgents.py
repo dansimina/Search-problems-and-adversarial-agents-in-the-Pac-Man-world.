@@ -500,14 +500,14 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     if len(foodGrid.asList()) == 0:
         return 0
 
-    nearestFood = min(manhattanDistance(position, food) for food in foodGrid.asList())
+    nearestFood = min(mazeDistance(position, food, problem.startingGameState) for food in foodGrid.asList())
 
     northernmost = min(foodGrid.asList(), key = lambda x: x[1])
     southernmost = max(foodGrid.asList(), key = lambda x: x[1])
     westernmost = min(foodGrid.asList(), key = lambda x: x[0])
     easternmost = max(foodGrid.asList(), key = lambda x: x[0])
 
-    return nearestFood + manhattanDistance(northernmost, southernmost) * 0.5 + manhattanDistance(westernmost, easternmost) * 0.5
+    return nearestFood + mazeDistance(northernmost, southernmost, problem.startingGameState) * 0.5 + mazeDistance(westernmost, easternmost, problem.startingGameState) * 0.5
 
 
 class ClosestDotSearchAgent(SearchAgent):
