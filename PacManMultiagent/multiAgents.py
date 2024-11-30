@@ -78,7 +78,6 @@ class ReflexAgent(Agent):
         currentPositon = currentGameState.getPacmanPosition()
         walls = currentGameState.getWalls()
         food = currentGameState.getFood()
-        ghostState = currentGameState.getGhostStates()
 
         ghostDistance = 0
         isGhostThere = False
