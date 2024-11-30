@@ -97,7 +97,7 @@ class ReflexAgent(Agent):
         for ghost in newGhostStates:
             ghostPosition = ghost.getPosition()
             ghostDistance = manhattanDistance(newPos, ghostPosition)
-            isGhostThere = isGhostThere | (ghostPosition == newPos)
+            isGhostThere |= ghostPosition == newPos
 
         furthestDistance = manhattanDistance(currentPositon, (walls.height, walls.width))
         nearestFoodScore = furthestDistance - min([manhattanDistance(newPos, food) for food in newFood.asList()]) if newFood.asList() else 0
