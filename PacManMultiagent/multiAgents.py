@@ -84,15 +84,11 @@ class ReflexAgent(Agent):
         penalty = 0
 
         x, y = currentPositon
-        cntWalls = 0
-        cntArea = 0
+        freeSpace = 0
         for i in range(max(0,  -2), min(x + 2, walls.width)):
             for j in range(max(0, -2), min(y + 2, walls.height)):
-                cntArea += 1
-                if walls[i][j]:
-                    cntWalls += 1
-
-        freeSpace = cntArea - cntWalls
+                if not walls[i][j]:
+                    freeSpace += 1
 
         for ghost in newGhostStates:
             ghostPosition = ghost.getPosition()
