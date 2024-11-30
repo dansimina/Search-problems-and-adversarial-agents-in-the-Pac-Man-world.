@@ -93,17 +93,12 @@ class ReflexAgent(Agent):
                 if walls[i][j]:
                     cntWalls += 1
 
-        wallsDensity = cntArea - cntWalls
+        freeSpace = cntArea - cntWalls
 
-        if len(newGhostStates) == 1:
-            ghostPosition = newGhostStates[0].getPosition()
+        for ghost in newGhostStates:
+            ghostPosition = ghost.getPosition()
             ghostDistance = manhattanDistance(newPos, ghostPosition)
-            isGhostThere = ghostState[0].getPosition() == newPos
-        elif len(newGhostStates) == 2:
-            positionOfFirstGhost = newGhostStates[0].getPosition()
-            positionOfSecondGhost = newGhostStates[1].getPosition()
-            ghostDistance = min(manhattanDistance(newPos, positionOfFirstGhost), manhattanDistance(newPos, positionOfSecondGhost))
-            isGhostThere = ghostState[0].getPosition() == newPos or newGhostStates[1].getPosition()
+            isGhostThere = isGhostThere | (ghostPosition == newPos)
 
         furthestDistance = manhattanDistance(currentPositon, (walls.height, walls.width))
         nearestFoodScore = furthestDistance - min([manhattanDistance(newPos, food) for food in newFood.asList()]) if newFood.asList() else 0
@@ -119,12 +114,14 @@ class ReflexAgent(Agent):
             if isGhostThere:
                 bonusEatGhost += 100
             ghostDistance = 0
+        elif isGhostThere:
+            return -10
 
-        ghostDistance = min(ghostDistance, 5)
+        ghostDistance = min(ghostDistance, 10)
 
         bonusEatFood = 10 if food[newPos[0]][newPos[1]] else 0
 
-        return successorGameState.getScore() + ghostDistance + nearestFoodScore + bonusEatFood + bonusEatGhost - penalty + wallsDensity
+        return successorGameState.getScore() + ghostDistance + nearestFoodScore + bonusEatFood + bonusEatGhost - penalty + freeSpace
 
 def scoreEvaluationFunction(currentGameState: GameState):
     """
